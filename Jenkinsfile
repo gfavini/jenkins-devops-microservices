@@ -40,17 +40,40 @@ pipeline {
 			steps {
 				sh "mvn clean compile"
 			}
-		}
-		
+		}		
 		stage('Test') {
 			steps {
 				sh "mvn test"
 			}
 		}
-		
 		stage('Integraton Test') {
 			steps {
 				sh "mvn failsafe:integration-test failsafe:verify"
+			}
+		}
+		stage('Package') {
+			steps {
+				sh "mvn package -DskipTest"
+			}
+		}
+
+		stage('Build Docker Image') {
+			steps {
+				script {
+					docker.build("gfavini/currency-exchange-devops:${env.BUILD_TAG}");
+				}
+			}
+		}
+		stage('Push Docker Image') {
+			steps {
+				// "docker build -t gfavini/currency-exchange-devops:$env.BUILD_TAG"
+				script {
+					docker.withRegistry('', 'dockerhub'){
+						dockerImage.push();
+						dockerImage.push('latest')
+					}
+					
+				}
 			}
 		}
 	} 
