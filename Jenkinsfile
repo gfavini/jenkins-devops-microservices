@@ -23,7 +23,7 @@ pipeline {
 	}
 
 	stages{
-		stage('Build') {
+		stage('Checkout') {
 			steps {
 				echo "Build"
 				sh "mvn --version"
@@ -36,15 +36,21 @@ pipeline {
 				echo "Build URL - $env.BUILD_URL"
 			}
 		}
-
-		stage('Test') {
+		stage('Compile') {
 			steps {
-				echo "Test"
+				sh "mvn clean compile"
 			}
 		}
+		
+		stage('Test') {
+			steps {
+				sh "mvn test"
+			}
+		}
+		
 		stage('Integraton Test') {
 			steps {
-				echo "Integraton Test"
+				sh "mvn failsafe:integration-test failsafe:verify"
 			}
 		}
 	} 
