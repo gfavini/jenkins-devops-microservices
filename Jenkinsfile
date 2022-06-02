@@ -31,6 +31,17 @@ pipeline {
 				echo "Integraton Test"
 			}
 		}
+	} 
+	post {
+		always{
+			echo 'Eu sempre rodo'
+		}
+		success {
+			echo 'Somente rodo quando tenho sucesso'
+		}
+		failure {
+			echo 'eu so rodo em falha'
+		}
 	}
 
 }
