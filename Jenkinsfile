@@ -60,7 +60,7 @@ pipeline {
 		stage('Build Docker Image') {
 			steps {
 				script {
-					docker.build("gfavini/currency-exchange-devops:${env.BUILD_TAG}");
+					dockerImage = docker.build("gfavini/currency-exchange-devops:${env.BUILD_TAG}");
 				}
 			}
 		}
